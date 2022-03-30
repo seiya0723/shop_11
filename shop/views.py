@@ -379,6 +379,15 @@ class CheckoutSuccessView(LoginRequiredMixin,View):
             print(e)
             return redirect("shop:checkout_error")
 
+
+        #ここで決済完了かどうかチェックできる。(何らかの方法でセッションIDを取得し、URLに直入力した場合、ここでエラーが出る。)
+        try:
+            customer    = stripe.Customer.retrieve(session.customer)
+            print(customer)
+        except:
+            return redirect("bbs:index")
+
+
         context = {}
 
         #TODO:ここでOrderモデルへ決済時刻の記録を行う。
